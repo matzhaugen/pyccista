@@ -33,7 +33,6 @@ void sthreshmat(MatrixXd & x,
   return;
 }
 
-
 // meat ends here
 typedef Triplet<double> T;
 
@@ -47,7 +46,8 @@ void ccista(double  *y_i, int  y_i_dim1, int y_i_dim2, //in: dense data
 	    int    **j_o, int *j_o_dim,                //out
 	    double **v_o, int *v_o_dim,                //out
 
-	    double lambda,                             //in: lambda
+	    double lambda1,                             //in: L1 penalty
+	    double lambda2,                             //in: L2 penalty
 	    double epstol = 1e-5,                      //in: convergence tolerance
 	    int    maxitr = 100,                       //in: maximum iterations allowed
 	    int    bb = 0)                             //in: use bb step (1:yes, 0:no)
@@ -58,12 +58,6 @@ void ccista(double  *y_i, int  y_i_dim1, int y_i_dim2, //in: dense data
 
   Map<Matrix<double, Dynamic, Dynamic, RowMajor> > Y(y_i, n, p);
 
-  // cout << "lambda: " << lambda << endl;
-  // cout << "epstol: " << epstol << endl;
-  // cout << "maxitr: " << maxitr << endl;
-
-  // SparseMatrix<double, ColMajor> X = Y.sparseView();
-  // SparseMatrix<double, ColMajor> X;
   SparseMatrix<double, ColMajor> X(p, p);
   Map<VectorXi> I(i_i, i_i_dim);
   Map<VectorXi> J(j_i, j_i_dim);
@@ -79,35 +73,32 @@ void ccista(double  *y_i, int  y_i_dim1, int y_i_dim2, //in: dense data
       index++;
     }
   X.setFromTriplets(tripletList.begin(), tripletList.end());
-  // cout << "X:" << endl;
-  // cout << X << endl;
 
+  DiagonalMatrix<double, Dynamic> XdiagM(p);
   SparseMatrix<double, ColMajor> Xn;
   SparseMatrix<double, ColMajor> Step;
 
-  // X.setIdentity();
-
   MatrixXd LambdaMat(p, p);
-  LambdaMat.setConstant(lambda);
+  LambdaMat.setConstant(lambda1);
   LambdaMat.diagonal().setZero().eval();
 
   MatrixXd S = (Y.transpose() * Y)/n;
-  // cout << "S:" <<endl;
-  // cout << S << endl;
   MatrixXd W = S * X;
   MatrixXd Wn(p, p);
 
   MatrixXd G(p, p);
   MatrixXd Gn(p, p);
-  MatrixXd subg(p, p); // computesubg here
+  MatrixXd subg(p, p);
   MatrixXd tmp(p, p);
   
-  double h = - X.diagonal().array().log().sum() + 0.5*(X*W).trace();
+  // double h = - X.diagonal().array().log().sum() + 0.5*(X*W).trace();
+  double h = - X.diagonal().array().log().sum() + 0.5*(X.cwiseProduct(W).sum());
+  if (lambda2 > 0) { h += (lambda2 * pow(X.norm(), 2)); } // elastic net
+
   double hn = 0; 
   double Qn = 0;
   // double f = 0;
-  double subgnorm, Xnnorm;
-  double maxdiff;
+  double subgnorm, Xnnorm, maxdiff;
 
   double tau;
   double taun = 1.0;
@@ -117,13 +108,14 @@ void ccista(double  *y_i, int  y_i_dim1, int y_i_dim2, //in: dense data
   int diagitr = 0;
   int backitr = 0;
 
-  G = 0.5 * (W + W.transpose());
-  G += - MatrixXd((MatrixXd((1/X.diagonal().array()))).asDiagonal());
-
+  XdiagM.diagonal() = - X.diagonal();
+  G = XdiagM.inverse();
+  G += 0.5 * (W + W.transpose());
+  if (lambda2 > 0) { G += lambda2 * 2.0 * X; } //elastic net
+  
   while (loop != 0){
     
     tau = taun;
-    // cout << "starting loop: " << tau << endl;
     
     diagitr = 0;
     backitr = 0;
@@ -145,7 +137,9 @@ void ccista(double  *y_i, int  y_i_dim1, int y_i_dim2, //in: dense data
       Step = Xn - X;
       Wn = S * Xn;
       Qn = h + Step.cwiseProduct(G).sum() + (1/(2*tau))*pow(Step.norm(),2);
-      hn = - Xn.diagonal().array().log().sum() + 0.5*(Xn*Wn).trace();
+      // hn = - Xn.diagonal().array().log().sum() + 0.5*(Xn*Wn).trace();
+      hn = - Xn.diagonal().array().log().sum() + 0.5*(Xn.cwiseProduct(Wn).sum());
+      if (lambda2 > 0) { hn += lambda2 * pow(Xn.norm(), 2); } //elastic net
 
       if (hn > Qn) { 
 	// cout << "backtracking" << endl;
@@ -157,21 +151,20 @@ void ccista(double  *y_i, int  y_i_dim1, int y_i_dim2, //in: dense data
 
     }
 
-    // if (info) {
-    //   tauehist(itr) = tau;  // effective tau
-    //   tauohist(itr) = taun; // original tau
-    // }
-
-    Gn = 0.5 * (Wn + Wn.transpose());
-    Gn += - MatrixXd((MatrixXd((1/Xn.diagonal().array()))).asDiagonal());
+    XdiagM.diagonal() = - Xn.diagonal();
+    Gn = XdiagM.inverse();
+    Gn += 0.5 * (Wn + Wn.transpose()); //minus is in above line
+    if (lambda2 > 0) { Gn += lambda2 * 2 * MatrixXd(Xn); }
+    // Gn = 0.5 * (Wn + Wn.transpose());
+    // Gn += - MatrixXd((MatrixXd((1/Xn.diagonal().array()))).asDiagonal());
 
     if ( bb == 0 ) {
       taun = 1;
     } else if ( bb == 1 ) {
-      taun = ( Step * Step ).eval().diagonal().array().sum() / (Step * ( Gn - G )).trace();
+      // taun = ( Step * Step ).eval().diagonal().array().sum() / (Step * ( Gn - G )).trace();
+      taun = ( Step * Step ).eval().diagonal().array().sum() / (Step.cwiseProduct( Gn - G ).sum());
     }
 
-    // compute subg
     tmp = MatrixXd(Xn).array().unaryExpr(ptr_fun(sgn));   // sign term
     tmp = Gn + tmp.cwiseProduct(LambdaMat);               // first term is in "tmp"
     subg = Gn;                                            // second term is in "subg"

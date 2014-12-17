@@ -67,11 +67,10 @@ void ccista(double  *y_i, int  y_i_dim1, int y_i_dim2, //in: dense data
   tripletList.reserve(i_i_dim);
  
   int index = 0;
-  while (index < i_i_dim)
-    {
-      tripletList.push_back(T(I[index], J[index], V[index]));
-      index++;
-    }
+  while (index < i_i_dim) {
+    tripletList.push_back(T(I[index], J[index], V[index]));
+    index++;
+  }
   X.setFromTriplets(tripletList.begin(), tripletList.end());
 
   DiagonalMatrix<double, Dynamic> XdiagM(p);
@@ -91,7 +90,6 @@ void ccista(double  *y_i, int  y_i_dim1, int y_i_dim2, //in: dense data
   MatrixXd subg(p, p);
   MatrixXd tmp(p, p);
   
-  // double h = - X.diagonal().array().log().sum() + 0.5*(X*W).trace();
   double h = - X.diagonal().array().log().sum() + 0.5*(X.cwiseProduct(W).sum());
   if (lambda2 > 0) { h += (lambda2 * pow(X.norm(), 2)); } // elastic net
 
@@ -120,7 +118,7 @@ void ccista(double  *y_i, int  y_i_dim1, int y_i_dim2, //in: dense data
     diagitr = 0;
     backitr = 0;
 
-    while ( 1 ) {
+    while ( 1 ) { // back-tracking line search
 
       if (diagitr != 0 || backitr != 0) { tau = tau * c; } // decrease tau only if needed
 
@@ -128,8 +126,8 @@ void ccista(double  *y_i, int  y_i_dim1, int y_i_dim2, //in: dense data
       sthreshmat(tmp, tau, LambdaMat);
       Xn = tmp.sparseView();
 
-      if (Xn.diagonal().minCoeff() < 1e-8 && diagitr < 10) { 
-	// cout << "diagonal scaling" << endl;
+      // make sure diagonal is positive
+      if (Xn.diagonal().minCoeff() < 1e-8 && diagitr < 10) {
 	diagitr += 1;
 	continue;
       }
@@ -137,15 +135,12 @@ void ccista(double  *y_i, int  y_i_dim1, int y_i_dim2, //in: dense data
       Step = Xn - X;
       Wn = S * Xn;
       Qn = h + Step.cwiseProduct(G).sum() + (1/(2*tau))*pow(Step.norm(),2);
-      // hn = - Xn.diagonal().array().log().sum() + 0.5*(Xn*Wn).trace();
       hn = - Xn.diagonal().array().log().sum() + 0.5*(Xn.cwiseProduct(Wn).sum());
       if (lambda2 > 0) { hn += lambda2 * pow(Xn.norm(), 2); } //elastic net
 
       if (hn > Qn) { 
-	// cout << "backtracking" << endl;
 	backitr += 1;
       } else {
-	// cout << "terminating" << endl;
 	break;
       }
 
@@ -155,13 +150,10 @@ void ccista(double  *y_i, int  y_i_dim1, int y_i_dim2, //in: dense data
     Gn = XdiagM.inverse();
     Gn += 0.5 * (Wn + Wn.transpose()); //minus is in above line
     if (lambda2 > 0) { Gn += lambda2 * 2 * MatrixXd(Xn); }
-    // Gn = 0.5 * (Wn + Wn.transpose());
-    // Gn += - MatrixXd((MatrixXd((1/Xn.diagonal().array()))).asDiagonal());
 
     if ( bb == 0 ) {
       taun = 1;
     } else if ( bb == 1 ) {
-      // taun = ( Step * Step ).eval().diagonal().array().sum() / (Step * ( Gn - G )).trace();
       taun = ( Step * Step ).eval().diagonal().array().sum() / (Step.cwiseProduct( Gn - G ).sum());
     }
 
@@ -181,8 +173,9 @@ void ccista(double  *y_i, int  y_i_dim1, int y_i_dim2, //in: dense data
       }
     }
 
-    X = Xn; h = hn; G = Gn;
-    // f = h + Xn.cwiseAbs().cwiseProduct(LambdaMat).sum();
+    X = Xn; 
+    h = hn; 
+    G = Gn;
 
     itr += 1;
 
@@ -203,28 +196,28 @@ void ccista(double  *y_i, int  y_i_dim1, int y_i_dim2, //in: dense data
   i_arr = (int *)malloc(NNZ*sizeof(int));
   j_arr = (int *)malloc(NNZ*sizeof(int));
   v_arr = (double *)malloc(NNZ*sizeof(double));
-  if (i_arr == NULL || j_arr == NULL || v_arr == NULL )
-    {
-      // errno = ENOMEM;
-      goto end;
-    }
+  if (i_arr == NULL || j_arr == NULL || v_arr == NULL ) {
+    // errno = ENOMEM;
+    goto end;
+  }
 
   i = 0;
-  for (int k=0; k<X.outerSize(); ++k)
-    for (SparseMatrix<double,ColMajor>::InnerIterator it(X,k); it; ++it)
-      {
-	i_arr[i] = it.row();
-	j_arr[i] = it.col();
-	v_arr[i] = it.value();
-	i++;
-      }
+  for (int k=0; k<X.outerSize(); ++k) {
+    for (SparseMatrix<double,ColMajor>::InnerIterator it(X,k); it; ++it) {
+      i_arr[i] = it.row();
+      j_arr[i] = it.col();
+      v_arr[i] = it.value();
+      i++;
+    }
+  }
 
  end:
   *i_o_dim = NNZ;
   *j_o_dim = NNZ;
   *v_o_dim = NNZ;
-
+  
   *i_o = i_arr;
   *j_o = j_arr;
   *v_o = v_arr;
+
 }

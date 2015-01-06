@@ -10,6 +10,10 @@ python setup.py build_ext -I[path to Eigen library] install
 To test if everything is fine, start python interpreter and execute
 something like the following:
 
+
+```
+#!python
+
 from concord import concord
 import numpy as np
 
@@ -17,3 +21,4 @@ x = np.random.randn(13, 9)
 omega = concord(x, 0.3)
 
 print np.round(omega.todense(),2)
+```

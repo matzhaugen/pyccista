@@ -21,4 +21,5 @@ x = np.random.randn(13, 9)
 omega = concord(x, 0.3)
 
 print np.round(omega.todense(),2)
+
 ```

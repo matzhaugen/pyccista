@@ -1,16 +1,16 @@
 #! /usr/bin/env python
 
 # System imports
-from distutils.core import *
-from distutils      import sysconfig
+# from distutils.core import *
+from setuptools import setup, Extension
+from os import environ
 
 # Third-party modules - we depend on numpy for everything
 import numpy
 
 from distutils.sysconfig import get_config_vars
-
 (opt,) = get_config_vars('OPT')
-os.environ['OPT'] = ' '.join(
+environ['OPT'] = ' '.join(
     flag for flag in opt.split() if flag != '-Wstrict-prototypes'
 )
 

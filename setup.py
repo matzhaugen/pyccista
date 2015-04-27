@@ -22,9 +22,9 @@ except AttributeError:
 
 # concord extension module
 _ccista = Extension('_ccista',
-                  ['concord/ccista.i','concord/ccista.cpp'],
-                   include_dirs = [numpy_include],
-                   swig_opts = ['-c++'])
+                    ['concord/ccista.i','concord/ccista.cpp'],
+                    include_dirs = [numpy_include, 'concord/'],
+                    swig_opts = ['-c++'])
 
 setup(name        = 'concord',
       description = 'Python implemetation of the concord algorithm for pseudo-likelihood graphical model selection',

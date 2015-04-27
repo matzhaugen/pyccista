@@ -1,1 +1,1 @@
-graft concord/
+recursive-include concord *

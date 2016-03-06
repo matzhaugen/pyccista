@@ -1,0 +1,12 @@
+void ccista(double  *x_i, int  x_i_dim1, int x_i_dim2,
+	    int     *i_i, int  i_i_dim,
+	    int     *j_i, int  j_i_dim,
+	    double  *v_i, int  v_i_dim,
+	    int    **i_o, int *i_o_dim,
+	    int    **j_o, int *j_o_dim,
+	    double **v_o, int *v_o_dim,
+	    double lambda1,
+	    double lambda2,
+	    double epstol,
+	    int    maxitr,
+	    int    bb);

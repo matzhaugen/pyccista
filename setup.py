@@ -1,4 +1,7 @@
 #! /usr/bin/env python
+# Create Whl: python setup.py build_ext -I eigen-eigen/ install sdist bdist_wheel
+# Local installation: python -m pip install dist/[name-of-whl]
+# Push to pip: python -m twine upload dist/*
 
 # System imports
 # from distutils.core import *
@@ -22,15 +25,15 @@ except AttributeError:
 
 # concord extension module
 _ccista = Extension('_ccista',
-                    ['concord/ccista.i','concord/ccista.cpp'],
-                    include_dirs = [numpy_include],
-                    swig_opts = ['-c++'])
+                    ['concord/ccista.i', 'concord/ccista.cpp'],
+                    include_dirs=[numpy_include],
+                    swig_opts=['-c++'])
 
-setup(name        = 'concord',
-      description = 'Python implemetation of the concord algorithm for pseudo-likelihood graphical model selection',
-      author      = 'Sang-Yun Oh, Aydin Buluc, Onkar Dalal, Kshitij Khare, Bala Rajaratnam',
-      author_email= 'syoh@lbl.gov',
-      version     = 'a020825963ab',
-      url         = 'http://web.stanford.edu/~sangoh',
-      packages    = ['concord'],
-      ext_modules = [_ccista])
+setup(name='pyconcord',
+      description='Python implemetation of the concord algorithm for pseudo-likelihood graphical model selection',
+      author='Sang-Yun Oh, Aydin Buluc, Onkar Dalal, Kshitij Khare, Bala Rajaratnam',
+      author_email='syoh@lbl.gov',
+      version='0.1',
+      url='http://web.stanford.edu/~sangoh',
+      packages=['concord'],
+      ext_modules=[_ccista])

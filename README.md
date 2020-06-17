@@ -1,3 +1,5 @@
+# pyccista
+
 This package provides the most basic concord-ista algorithm for
 computing the concord estimate.
 
@@ -22,4 +24,3 @@ omega = concord(x, 0.3)
 print np.round(omega.todense(),2)
 ```
 
-# pyccista

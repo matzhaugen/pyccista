@@ -22,3 +22,4 @@ omega = concord(x, 0.3)
 print np.round(omega.todense(),2)
 ```
 
+# pyccista

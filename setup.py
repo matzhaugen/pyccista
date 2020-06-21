@@ -26,7 +26,7 @@ except AttributeError:
 # concord extension module
 _ccista = Extension('_ccista',
                     ['concord/ccista.i', 'concord/ccista.cpp'],
-                    include_dirs=[numpy_include],
+                    include_dirs=[numpy_include, "eigen-3.3.7"],
                     swig_opts=['-c++'])
 
 setup(name='pyconcord',

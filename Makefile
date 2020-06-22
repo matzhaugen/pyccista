@@ -7,5 +7,9 @@ build:
 run:
 	docker build -t matzhaugen/concord:$(TAG) . &&\
 	docker run -it matzhaugen/concord:$(TAG) bash
-install:
-	docker run -it --rm -e PLAT=${PLAT} -v `pwd`:/io ${DOCKER_IMAGE} bash #/io/travis/build-wheels.sh
+upload:
+	docker build -f Dockerfile_twine -t twine . 
+	docker run -e TWINE_PASSWORD=${TWINE_PASSWORD} twine  travis/upload_package.sh
+test:
+	docker run -it twine bash
+	

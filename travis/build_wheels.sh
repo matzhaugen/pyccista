@@ -11,9 +11,9 @@ function repair_wheel {
 }
 
 # Compile wheels
-for PYBIN in /opt/python/cp39-cp39/bin; do
+for PYBIN in /opt/python/cp38-cp38/bin; do
     "${PYBIN}/pip" install -r /io/requirements.txt
-    "${PYBIN}/python3" setup.py build_ext -I eigen-3.3.7 install bdist_wheel
+    "${PYBIN}/python3" setup.py build_ext -I eigen-3.3.7 bdist_wheel
 done
 
 # Bundle external shared libraries into the wheels
@@ -22,6 +22,6 @@ for whl in dist/*.whl; do
 done
 
 # Install packages and test
-for PYBIN in /opt/python/cp39-cp39/bin/; do
+for PYBIN in /opt/python/cp38-cp38/bin/; do
     "${PYBIN}/pip" install pyconcord --no-index -f /io/wheelhouse
 done

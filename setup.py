@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Create Whl: python setup.py build_ext -I eigen-eigen/ install sdist bdist_wheel
+# Create Whl: python setup.py build_ext install sdist bdist_wheel
 # Local installation: python -m pip install dist/[name-of-whl]
 # Push to pip: python -m twine upload dist/*
 
@@ -33,7 +33,7 @@ setup(name='pyconcord',
       description='Python implemetation of the concord algorithm for pseudo-likelihood graphical model selection',
       author='Sang-Yun Oh, Aydin Buluc, Onkar Dalal, Kshitij Khare, Bala Rajaratnam',
       author_email='syoh@lbl.gov',
-      version='0.1',
+      version='0.2.1',
       url='http://web.stanford.edu/~sangoh',
       packages=['concord'],
       ext_modules=[_ccista])

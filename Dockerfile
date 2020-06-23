@@ -1,10 +1,12 @@
-FROM quay.io/pypa/manylinux2010_x86_64 as builder
+FROM quay.io/pypa/manylinux2014_x86_64 as builder
 COPY . /io
 WORKDIR /io
-ENV PLAT=manylinux2010_x86_64
+ENV PLAT=manylinux2014_x86_64
 # Install concord
 RUN travis/install_libraries.sh
-RUN travis/build_wheels.sh
+
+
+# RUN travis/build_wheels.sh
 
 # FROM python:3.8-slim
 # COPY --from=builder /io/wheelhouse /wheelhouse

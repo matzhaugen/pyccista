@@ -1,2 +1,2 @@
 #!/bin/bash
-python -m twine upload --repository-url https://test.pypi.org/legacy/ io/wheelhouse/* -u mahaugen -p ${TWINE_PASSWORD}
+python -m twine upload --skip-existing --repository-url ${REPOSITORY_URL} io/wheelhouse/* -u __token__ -p ${TWINE_TOKEN_TEST}

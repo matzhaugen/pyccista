@@ -10,9 +10,9 @@ matrix:
            PLAT=manylinux2010_x86_64
            TAG=1
 install:
-  - docker build -t matzhaugen/concord-builder:$(TAG) -f Dockerfile_builder .
+  - docker build -t matzhaugen/concord-builder:$TAG -f Dockerfile_builder .
 
 script:
-  - docker build -t matzhaugen/concord:$(TAG) -f Dockerfile_concord .
-  # - docker build -f Dockerfile_twine -t matzhaugen/twine . 
-  # - docker run -e TWINE_PASSWORD=${TWINE_PASSWORD} matzhaugen/ scripts/upload_package.sh
+  - docker build -t matzhaugen/concord:$TAG -f Dockerfile_concord .
+  # - docker build -f Dockerfile_twine -t matzhaugen/twine . >/dev/null 2>&1
+  # - docker run -e TWINE_PASSWORD=${TWINE_PASSWORD} matzhaugen/ scripts/upload_package.sh >/dev/null 2>&1

@@ -1,1 +1,0 @@
-pip install numpy && pip install --index-url https://test.pypi.org/simple/ pyconcord==0.2.3

@@ -4,4 +4,4 @@ WORKDIR /io
 ENV PLAT=manylinux2014_x86_64
 # Install concord
 
-RUN travis/build_wheels.sh
+RUN scripts/build_wheels.sh

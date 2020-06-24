@@ -2,7 +2,7 @@ PLAT=manylinux1_x86_64
 DOCKER_IMAGE=quay.io/pypa/manylinux2014_x86_64
 TAG=1
 .PHONY: build concord
-build:
+install:
 	docker build -t matzhaugen/concord-builder:$(TAG) -f Dockerfile_builder .
 concord:
 	docker build -t matzhaugen/concord:$(TAG) -f Dockerfile_concord .

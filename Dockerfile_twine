@@ -2,3 +2,4 @@
 FROM python:3.8-slim
 RUN pip install twine
 COPY --from=matzhaugen/concord:1 /io/wheelhouse /io/wheelhouse
+COPY scripts scripts

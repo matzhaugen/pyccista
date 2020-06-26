@@ -2,7 +2,7 @@
 system=$(uname -a)
 # Compile wheels
 if [[ ${system} == *"Darwin"* ]]; then
-	./install_libraries.sh
+	./scripts/install_libraries.sh
 else
 	docker pull $1:$2
 	if [[ "$(docker images -q $1:$2 2> /dev/null)" == "" ]]; then

@@ -14,7 +14,7 @@ system=$(uname -a)
 # Compile wheels
 if [[ ${system} == *"Darwin"* ]]; then
 	pip install -r requirements.txt
-	python setup.py build_ext -I eigen-3.3.7 bdist_wheel
+	python3 setup.py build_ext -I eigen-3.3.7 bdist_wheel
 else
 	for PYBIN in /opt/python/*/bin; do
 	    "${PYBIN}/pip" install -r requirements.txt

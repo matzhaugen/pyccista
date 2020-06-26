@@ -2,7 +2,7 @@ system=$(uname -a)
 #!/bin/bash
 if [[ ${system} == *"Darwin"* ]]; then
 	./scripts/build_wheels.sh
-	python -m twine upload --skip-existing --repository-url ${REPOSITORY_URL} dist/*
+	python3 -m twine upload --skip-existing --repository-url ${REPOSITORY_URL} dist/*
 else
 	docker build -t matzhaugen/concord:$TAG -f Dockerfile_concord . &&\
 	docker build -t matzhaugen/twine -f Dockerfile_twine  . >/dev/null 2>&1 &&\

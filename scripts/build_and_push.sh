@@ -6,6 +6,5 @@ if [[ ${system} == *"Darwin"* ]]; then
 else
 	docker build -t matzhaugen/concord:$TAG -f Dockerfile_concord . &&\
 	docker build -t matzhaugen/twine -f Dockerfile_twine  . >/dev/null 2>&1 &&\
-	docker run -e TWINE_USERNAME=$TWINE_USERNAME -e TWINE_PASSWORD=$TWINE_PASSWORD -e REPOSITORY_URL=$REPOSITORY_URL &&\
-		matzhaugen/twine scripts/upload_package.sh
+	docker run -e TWINE_USERNAME=$TWINE_USERNAME -e TWINE_PASSWORD=$TWINE_PASSWORD -e REPOSITORY_URL=$REPOSITORY_URL matzhaugen/twine scripts/upload_package.sh
 fi

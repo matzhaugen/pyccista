@@ -38,11 +38,6 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
     python3 --version;
     pip --version;
-    pyinstaller --version;
-    fi
-
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-    pip install -r requirements.txt --user;
     fi
 
 install:

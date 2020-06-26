@@ -1,4 +1,5 @@
 FROM quay.io/pypa/manylinux2014_x86_64 as builder
 ENV PLAT=manylinux2014_x86_64
+COPY scripts scripts
 # Install dependencies
 RUN scripts/install_libraries.sh

@@ -1,4 +1,5 @@
 FROM matzhaugen/concord-builder:1 as builder
 ENV PLAT=manylinux2014_x86_64
+COPY scripts scripts
 # Install concord
 RUN scripts/build_wheels.sh

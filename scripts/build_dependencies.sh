@@ -4,7 +4,7 @@ system=$(uname -a)
 if [[ ${system} == *"Darwin"* ]]; then
 	./scripts/install_libraries.sh
 else
-	docker pull $1:$2
+	docker pull $1:latest
 	if [[ "$(docker images -q $1:$2 2> /dev/null)" == "" ]]; then
 	  docker build -t $1:$2 -f Dockerfile_builder .
 	fi

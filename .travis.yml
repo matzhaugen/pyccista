@@ -1,19 +1,28 @@
 notifications:
   email: false
 
-services:
-  - docker
-
 jobs:
   include:
     - os: osx
-      env: REPOSITORY_URL=https://test.pypi.org/legacy/ TWINE_USERNAME=__token__ TWINE_PASSWORD=$TWINE_TOKEN_TEST
-    # - env: DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PLAT=manylinux2010_x86_64 TAG=1 REPOSITORY_URL=https://test.pypi.org/legacy/ TWINE_USERNAME=__token__ TWINE_PASSWORD=$TWINE_TOKEN_TEST
-    # - env: DOCKER_IMAGE=quay.io/pypa/manylinux2014_x86_64 PLAT=manylinux2014_x86_64 TAG=1 REPOSITORY_URL=https://test.pypi.org/legacy/ TWINE_USERNAME=__token__ TWINE_PASSWORD=$TWINE_TOKEN_TEST
-  
+      language: python
+      python: "3.8" 
+    - os: osx
+      language: python
+      python: "3.7" 
+    - os: osx
+      language: python
+      python: "3.6" 
+    - os: osx
+      language: python
+      python: "2.7" 
+    - env: DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PLAT=manylinux2010_x86_64 TAG=1 
+      services: docker
+    - env: DOCKER_IMAGE=quay.io/pypa/manylinux2014_x86_64 PLAT=manylinux2014_x86_64 TAG=1
+      services: docker
 
 env: 
   global:
+    - REPOSITORY_URL=https://test.pypi.org/legacy/ TWINE_USERNAME=__token__ TWINE_PASSWORD=$TWINE_TOKEN_TEST
     - secure: ccpfJRrV72F6mWfsvUgFywv70pr9LHVT/5K+RerYL/foww5yVlfQ35ed5InnIMKK/CA/A5xvZfgFGV5xcuMeYHr5FYmJRkNzj95TfbLfBJHGk0pzGynUxhWLdqyzJ8+DuTY5e/ZlbPFQgTKzrP/5oKCHPrSJ91REY4D0dmP/gOjfIBbU7p2jn6EajSZrWxSIhVJfeiVibPqhmQI5DXgYzWfG+eJhOZCnyDjSGD4t6RW09KMxHAmsJWdGBvMZChcbtvwxW1aKiaffRHMlpGztblP/633Z2GwEqk/hR47PE+xe/ykLHcHmWzLye690pqF4WMDL9Bg5e3I4lZlyDXDNQdRmlMAENd8VmUNanA/LasuyC5N5pSoyG/1KlOaEF7ejWsq4LYXz+2C1W7DzLxv4QfKdRwRN0x/WzLz7I1kWxOJRQC975IeLLio+217fp3vkJDcHYDv12Mq9Aq1FQXN8aeVRGWyN4R3pGCNyght7hHqk2Ox27r344HakkP97eeiN1J3YwgpF880OfWnA4RZ/DT3Aw0FHHZTx+iW+Fg7xxxwypQJrID5ouPvrRMZ2eUABqGropYEKIBymaDWFu9PhCTmHh406v9iFseI4KEYi2Fm82b9VYJfFMVR+dp9sS44yMqsJ4ajsgEL0jUg/V1mIyYt6icjIkAsnrk7Slzx3PFs=
     - secure: GUBWVNzOcfyNcqbwdolAG/sUG/o6yVc+pwbTQOuqtUGWCxSPA9R7cPL2RKnpHePugFapoAb7dEfgFCNZmgvustogDsSAfbaBizHRB2ddyr8B+DfxTXqgmb3HyfLymKCEhS2gGVaQmGKfkOQx7EBNjfXeL0sRnZN8EERCw4VGN+UhoV/zFuK31JVRD6RdfyO9SG0RKMSwFR1w80vaSibq09sQ8QOos8XfbANHp7TajZ5XuIC4ZhGFnQ0r4N+bvFnSxkFNNSdI63rvSkxQM3lDE+2uX+8biwbG+5AshTvYjcV/5OuQTu59dmDMPccLv4sSyQUwrAhNRsc0dCL8srYJXkhqwNi4YxVVvqgqX/Q64oLXkGo6gtWnHkX+QDmBrhdXZxvgENWdStcHq/nR3xMoe0fChO0PJp+SefpDRjOUknZJ4kaRM+rfLkEbMQ2dUeMMOLhMhekSyICWlqfppFCTbWoGxtXH6UIgaxsEqUMEFf7yvhsIOoVHYFUqJZ0UyDyiVe1rw58dNqa//1+W5jbtbXAmY1sa7CPqGH7Ea6lxiyWkaL350ykN7OaLeExjaA3L0JiFo+Ts14sAG8fi8ffjuKNhNdcS3/Gu+W12di6TJ/89zZN5KkRye7e8bKMfw/vA665WyLrTUWOdBVczIWZpNDnTaf15aEqQ3oJCMdZpb5E=
 

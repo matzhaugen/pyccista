@@ -36,5 +36,5 @@ setup(name='pyconcord',
       version='0.2.3',
       url='http://web.stanford.edu/~sangoh',
       packages=['concord'],
-      install_requires=['numpy>=1.19.0'],
+      install_requires=['numpy>=1.19.0', 'scipy>=1.5.0'],
       ext_modules=[_ccista])

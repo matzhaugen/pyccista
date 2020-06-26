@@ -1,5 +1,5 @@
 
-mkdir tarfiles && yum install -y pcre-devel
+mkdir tarfiles #&& yum install -y pcre-devel
 curl -L https://gitlab.com/libeigen/eigen/-/archive/3.3.7/eigen-3.3.7.tar.gz -o tarfiles/eigen-3.3.7.tar.gz &&\
 tar -xzvf tarfiles/eigen-3.3.7.tar.gz > /dev/null 2>&1
 

@@ -1,5 +1,11 @@
 
-docker pull $1:$2
-if [[ "$(docker images -q $1:$2 2> /dev/null)" == "" ]]; then
-  docker build -t $1:$2 -f Dockerfile_builder .
+system=$(uname -a)
+# Compile wheels
+if [[ ${system} == *"Darwin"* ]]; then
+	./install_libraries.sh
+else
+	docker pull $1:$2
+	if [[ "$(docker images -q $1:$2 2> /dev/null)" == "" ]]; then
+	  docker build -t $1:$2 -f Dockerfile_builder .
+	fi
 fi

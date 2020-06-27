@@ -30,8 +30,6 @@ before_install:
   export PATH=$PATH:/Users/travis/Library/Python/$PYTHON_POINT/bin; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then python3 --version; pip --version; fi
 install:
-- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-- docker pull matzhaugen/concord-builder:$TAG
 - "./scripts/build_dependencies.sh matzhaugen/concord-builder $TAG"
 script:
 - "./scripts/build_and_push.sh"

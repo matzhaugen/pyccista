@@ -4,7 +4,7 @@ jobs:
   include:
   - os: osx
     language: generic
-    env: PYTHON=36 PYTHON_POINT="3.6"
+    env: PYTHON=36 PYTHON_POINT="3.6" TWINE_PASSWORD=$TWINE_TOKEN_TEST
   - env: DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PLAT=manylinux2010_x86_64
       TAG=1 TWINE_PASSWORD=$TWINE_TOKEN_TEST
     services: docker

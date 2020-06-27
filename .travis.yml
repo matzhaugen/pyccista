@@ -4,22 +4,28 @@ jobs:
   include:
   - os: osx
     language: generic
-    env: PYTHON=36 PYTHON_POINT="3.6" TWINE_PASSWORD=$TWINE_TOKEN_TEST
+    env: PYTHON=36 PYTHON_POINT="3.6" TWINE_PASSWORD=$TWINE_TOKEN_PROD
+  - os: osx
+    language: generic
+    env: PYTHON=37 PYTHON_POINT="3.7" TWINE_PASSWORD=$TWINE_TOKEN_PROD
+  - os: osx
+    language: generic
+    env: PYTHON=38 PYTHON_POINT="3.8" TWINE_PASSWORD=$TWINE_TOKEN_PROD
   - env: DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PLAT=manylinux2010_x86_64
-      TAG=1 TWINE_PASSWORD=$TWINE_TOKEN_TEST
+      TAG=1 TWINE_PASSWORD=$TWINE_TOKEN_PROD
     services: docker
   - env: DOCKER_IMAGE=quay.io/pypa/manylinux2014_x86_64 PLAT=manylinux2014_x86_64
-      TAG=1 TWINE_PASSWORD=$TWINE_TOKEN_TEST
+      TAG=1 TWINE_PASSWORD=$TWINE_TOKEN_PROD
     services: docker
 env:
   global:
   - secure: ccpfJRrV72F6mWfsvUgFywv70pr9LHVT/5K+RerYL/foww5yVlfQ35ed5InnIMKK/CA/A5xvZfgFGV5xcuMeYHr5FYmJRkNzj95TfbLfBJHGk0pzGynUxhWLdqyzJ8+DuTY5e/ZlbPFQgTKzrP/5oKCHPrSJ91REY4D0dmP/gOjfIBbU7p2jn6EajSZrWxSIhVJfeiVibPqhmQI5DXgYzWfG+eJhOZCnyDjSGD4t6RW09KMxHAmsJWdGBvMZChcbtvwxW1aKiaffRHMlpGztblP/633Z2GwEqk/hR47PE+xe/ykLHcHmWzLye690pqF4WMDL9Bg5e3I4lZlyDXDNQdRmlMAENd8VmUNanA/LasuyC5N5pSoyG/1KlOaEF7ejWsq4LYXz+2C1W7DzLxv4QfKdRwRN0x/WzLz7I1kWxOJRQC975IeLLio+217fp3vkJDcHYDv12Mq9Aq1FQXN8aeVRGWyN4R3pGCNyght7hHqk2Ox27r344HakkP97eeiN1J3YwgpF880OfWnA4RZ/DT3Aw0FHHZTx+iW+Fg7xxxwypQJrID5ouPvrRMZ2eUABqGropYEKIBymaDWFu9PhCTmHh406v9iFseI4KEYi2Fm82b9VYJfFMVR+dp9sS44yMqsJ4ajsgEL0jUg/V1mIyYt6icjIkAsnrk7Slzx3PFs=
   - secure: GUBWVNzOcfyNcqbwdolAG/sUG/o6yVc+pwbTQOuqtUGWCxSPA9R7cPL2RKnpHePugFapoAb7dEfgFCNZmgvustogDsSAfbaBizHRB2ddyr8B+DfxTXqgmb3HyfLymKCEhS2gGVaQmGKfkOQx7EBNjfXeL0sRnZN8EERCw4VGN+UhoV/zFuK31JVRD6RdfyO9SG0RKMSwFR1w80vaSibq09sQ8QOos8XfbANHp7TajZ5XuIC4ZhGFnQ0r4N+bvFnSxkFNNSdI63rvSkxQM3lDE+2uX+8biwbG+5AshTvYjcV/5OuQTu59dmDMPccLv4sSyQUwrAhNRsc0dCL8srYJXkhqwNi4YxVVvqgqX/Q64oLXkGo6gtWnHkX+QDmBrhdXZxvgENWdStcHq/nR3xMoe0fChO0PJp+SefpDRjOUknZJ4kaRM+rfLkEbMQ2dUeMMOLhMhekSyICWlqfppFCTbWoGxtXH6UIgaxsEqUMEFf7yvhsIOoVHYFUqJZ0UyDyiVe1rw58dNqa//1+W5jbtbXAmY1sa7CPqGH7Ea6lxiyWkaL350ykN7OaLeExjaA3L0JiFo+Ts14sAG8fi8ffjuKNhNdcS3/Gu+W12di6TJ/89zZN5KkRye7e8bKMfw/vA665WyLrTUWOdBVczIWZpNDnTaf15aEqQ3oJCMdZpb5E=
-  - REPOSITORY_URL=https://test.pypi.org/legacy/ TWINE_USERNAME=__token__ DOCKER_USERNAME=matzhaugen
+  - REPOSITORY_URL=https://pypi.python.org/simple TWINE_USERNAME=__token__ DOCKER_USERNAME=matzhaugen
   - secure: UFIk+a1nrXhhkuJiCw0RNewAyeiHQRR3uQes8nK7lFfh1VmV9iQwYv9zRi6LIKlQnflkXmbeKB/ySWNYlHyBezr4iEZV/8TFe1VfcUWGjmlokZUUyRhv2bcP7K1tISob4oT7L1CwEYzgiacEiEPiCkw5cjI6zrNCXxs5xN8bqt6+G+H4BWqk7nzQvjD7iLD5h2mWI+9XCxGE9VCmPBIrRRAYNFwUYYfKYt+kxFbIUNdaEPineBCfOlTxBzDATfxTHiJ/CQxTytS6hSvB59uF0TP+081LekJ8rjBzNFZwE/hPvCCYoCJeLbS9r/YdMR1pf0iulflEX54afmmMfKz60kTV4I5SdmShEcxKYRnKQjhB+vXu/vNlOwjKj0HDn0CjTr8Jl0TQ/PyUB5TReayQhFpdlXNkbQoszu6gxuFltt/VGJnSYC0GIKwd79w+lVWJXkXNgDxAxImWeAZmT2HhxR5GOlf57lBurAfFa2E3s7L1LVzC9rJLBFTrlIK4xIlQ0GpLY+S7fBg8InWDCJRVK0JaiWRHuJGfqwoVuCipJMsH1zay1+XGMzAXIpNo1gRs74lZl1NliIKWIrUaNa7YpPFMpKIEl0vmmEb9aDgMrG7WEynVzlR/MjU7K5siaktT7tkgoDhKWFB+Uw28cS7QLK/CDm0d2B/0XMFbCmL/Qa0=
 
 before_install:
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install swig; curl -LO https://raw.githubusercontent.com/GiovanniBussi/macports-ci/master/macports-ci;
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then curl -LO https://raw.githubusercontent.com/GiovanniBussi/macports-ci/master/macports-ci;
   source ./macports-ci install; fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; 
   then yes | sudo port install python$PYTHON;

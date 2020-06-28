@@ -6,7 +6,9 @@ TAG=1
 develop:
 	pip uninstall -y pyconcord &&\
 	pip install numpy scipy &&\
+	python setup.py build_ext -I eigen-3.3.7 bdist_wheel &&\
 	pip install pyconcord --no-index -f dist/pyconcord-0.3-cp37-cp37m-macosx_10_15_x86_64.whl
+	import concord | python
 build:
 	python setup.py build_ext -I eigen-3.3.7 bdist_wheel
 install:

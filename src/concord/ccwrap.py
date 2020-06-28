@@ -15,7 +15,7 @@ def concord(x, penalty1, penalty2=0, x0=None, epstol=1e-5, maxitr=100, bb=0):
             raise Exception('x0 is not convertible to COO sparse matrix')
 
     i, j, data = ccista(
-        x, x0.row, x0.col, x0.data, 
+        x, x0.row, x0.col, x0.data,
         penalty1, penalty2, epstol, maxitr, bb)
 
     return csr_matrix((data, vstack((i, j))),

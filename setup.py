@@ -6,6 +6,7 @@
 # System imports
 # from distutils.core import *
 from setuptools import setup, Extension
+from setuptools import find_packages
 from os import environ
 
 # Third-party modules - we depend on numpy for everything
@@ -25,7 +26,7 @@ except AttributeError:
 
 # concord extension module
 _ccista = Extension('_ccista',
-                    ['concord/ccista.i', 'concord/ccista.cpp'],
+                    ['src/concord/ccista.i', 'src/concord/ccista.cpp'],
                     include_dirs=[numpy_include, "eigen-3.3.7"],
                     swig_opts=['-c++'])
 
@@ -35,6 +36,8 @@ setup(name='pyconcord',
       author_email='syoh@lbl.gov',
       version='0.3',
       url='http://web.stanford.edu/~sangoh',
-      packages=['concord'],
-      install_requires=['numpy>=1.19.0', 'scipy>=1.5.0'],
+      packages=find_packages('src'),
+      package_dir={'': 'src'},
+      test_suite='tests',
+      install_requires=['numpy>=1.18.0', 'scipy>=1.5.0'],
       ext_modules=[_ccista])

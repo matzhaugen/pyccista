@@ -3,6 +3,12 @@ DOCKER_IMAGE=quay.io/pypa/manylinux2014_x86_64
 REPOSITORY_URL=https://test.pypi.org/legacy/
 TAG=1
 .PHONY: build concord test
+develop:
+	pip uninstall -y pyconcord &&\
+	pip install numpy scipy &&\
+	pip install pyconcord --no-index -f dist/pyconcord-0.3-cp37-cp37m-macosx_10_15_x86_64.whl
+build:
+	python setup.py build_ext -I eigen-3.3.7 bdist_wheel
 install:
 	docker build -t matzhaugen/concord-builder:$(TAG) -f Dockerfile_builder .
 concord:

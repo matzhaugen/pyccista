@@ -1,7 +1,7 @@
 # pyccista
 
 This package provides the most basic concord-ista algorithm for
-computing the concord estimate in python3.
+computing the concord estimate in python3. The algorithm is based on the paper by [Oh, Dalal, Khare and Rajaratnam](https://github.com/matzhaugen/pyccista.git).
 
 Prerequisite for installing this package is the Eigen linear algebra
 library in addition to numpy and scipy. In order to install this

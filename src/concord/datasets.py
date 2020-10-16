@@ -1,15 +1,17 @@
 import numpy as np
-TOL = 1e-10
 from math import comb
+np.set_printoptions(suppress=True)
+TOL = 1e-10
+
 
 def erodos_renyi_graph(n_nodes, edge_fraction=0.1):
     """Return covariance and precision matrix from an Erdos-Renyi graph
-    
+
     Args:
         n_nodes (int): Number of nodes
         edge_fraction (float, optional): Fraction of edges that have non-zero weighting,
         a number between 0 and 1.
-    
+
     Returns:
         sigma: Covariance matrix
         omega: Precision matrix
@@ -30,7 +32,7 @@ def erodos_renyi_graph(n_nodes, edge_fraction=0.1):
 
     # Make diagonally dominant
     row_sum = np.sum(np.abs(raw_omega), axis=1)
-    scaled_raw_omega = raw_omega / row_sum / 1.5
+    scaled_raw_omega = raw_omega / row_sum[:, np.newaxis] / 1.5
     sym_scaled_omega = (scaled_raw_omega + scaled_raw_omega.T) / 2
     sym_scaled_omega[np.diag_indices(n_nodes)] = 1
 

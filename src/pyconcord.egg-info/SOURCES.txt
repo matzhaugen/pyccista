@@ -1,6 +1,5 @@
 MANIFEST.in
 README.md
-pyproject.toml
 setup.py
 src/concord/__init__.py
 src/concord/ccista.cpp

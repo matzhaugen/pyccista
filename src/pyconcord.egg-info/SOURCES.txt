@@ -7,6 +7,7 @@ src/concord/ccista.cpp
 src/concord/ccista.i
 src/concord/ccista.py
 src/concord/ccwrap.py
+src/concord/datasets.py
 src/concord/robust_selection.py
 src/pyconcord.egg-info/PKG-INFO
 src/pyconcord.egg-info/SOURCES.txt

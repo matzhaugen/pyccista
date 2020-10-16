@@ -1,43 +1,7 @@
 import numpy as np
-from concord import robust_selection, concord
+from concord import robust_selection, concord, datasets
 from sklearn.covariance import graphical_lasso
 from sklearn.metrics import matthews_corrcoef
-from math import comb
-
-d = 200  # number of nodes
-TOL = 1e-10
-
-
-def generate_test_model(d):
-    n_possible_edges = comb(d, 2)
-
-    edges = np.ones(n_possible_edges)
-    edges[np.random.rand(n_possible_edges) > 0.1] = 0
-
-    weights = np.random.rand(n_possible_edges) / 2 + 0.5
-    negative_weights_index = np.random.rand(n_possible_edges) > 0.5
-    weights[negative_weights_index] *= -1
-
-    omega = np.zeros((d, d))
-    omega[np.tril_indices(d, -1)] = edges * weights
-    omega[np.triu_indices(d, 1)] = edges * weights
-    omega[np.diag_indices(d)] = 1
-
-    # Make diagonally dominant
-    row_sum = np.sum(np.abs(omega), axis=1)
-    scaled_omega = omega / row_sum / 1.5
-    sym_scaled_omega = (scaled_omega + scaled_omega.T) / 2
-    sym_scaled_omega[np.diag_indices(d)] = 1
-
-    A_inv = np.linalg.inv(sym_scaled_omega)
-    A_inv_diag = (np.diagonal(A_inv)).reshape(d, 1)
-    scale = np.sqrt(A_inv_diag * A_inv_diag.T)
-
-    sigma = A_inv / scale
-    new_omega = np.linalg.inv(sigma)
-    new_omega[new_omega < TOL] = 0
-
-    return sigma, new_omega
 
 
 def mathews_correlation_coefficient(edges, edges_hat):
@@ -59,10 +23,11 @@ class TestCVConcord:
 
     def test_with_true_cov_known(self):
         n = 1000
+        d = 200  # number of nodes
         n_experimens = 2
         mcc = np.zeros(n_experimens)
         mcc_concord = np.zeros(n_experimens)
-        sigma, omega = generate_test_model(d)
+        sigma, omega = datasets.erodos_renyi_graph(d)
         for i in np.arange(n_experimens):
             if not (i % 10):
                 print(i)

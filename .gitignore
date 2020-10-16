@@ -1,0 +1,10 @@
+*.ipynb_checkpoints
+*.DS_Store
+.eggs/
+.venv
+build/
+dist/
+eigen-3.3.7/
+tarfiles/
+.tox
+swig-3.0.12/

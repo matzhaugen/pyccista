@@ -42,6 +42,5 @@ def erodos_renyi_graph(n_nodes, edge_fraction=0.1):
 
     sigma = A_inv / scale
     omega = np.linalg.inv(sigma)
-    omega[omega < TOL] = 0
-
+    omega[np.abs(omega) < TOL] = 0
     return sigma, omega

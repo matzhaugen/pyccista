@@ -5,7 +5,7 @@ TAG=1
 .PHONY: build concord test
 develop:
 	pip3.8 uninstall -y pyconcord &&\
-	pip3.8 install numpy scipy &&\
+	pip3.8 install -r dev_requirements.txt &&\
 	python3.8 setup.py build_ext -I eigen-3.3.7 bdist_wheel &&\
 	pip3.8 install pyconcord --no-index -f dist/pyconcord-0.3-cp38-cp38-macosx_10_15_x86_64.whl
 build:

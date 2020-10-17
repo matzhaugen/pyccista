@@ -2,6 +2,7 @@ import numpy as np
 from concord import robust_selection, concord, datasets
 from sklearn.covariance import graphical_lasso
 from sklearn.metrics import matthews_corrcoef
+import time
 
 
 def mathews_correlation_coefficient(edges, edges_hat):
@@ -22,9 +23,9 @@ class TestCVConcord:
         assert optimal_lambda > 0
 
     def test_with_true_cov_known(self):
-        n = 100
-        d = 20  # number of nodes
-        n_experimens = 2
+        n = 1000
+        d = 10  # number of nodes
+        n_experimens = 1
         mcc = np.zeros(n_experimens)
         mcc_concord = np.zeros(n_experimens)
         sigma, omega = datasets.erodos_renyi_graph(d)
@@ -37,8 +38,14 @@ class TestCVConcord:
             data /= data.std(axis=0)
             emp_cov = np.dot(data.T, data) / n
             optimal_lambda = robust_selection(data)
+            t_start = time.time()
             omega_concord = concord(data, optimal_lambda)
+            t_end = time.time()
+            print(f"Concord time: {t_end - t_start}")
+            t_start = time.time()
             sigma_lasso, omega_lasso = graphical_lasso(emp_cov, optimal_lambda)
+            t_end = time.time()
+            print(f"Lasso time: {t_end - t_start}")
 
             edges_lasso = np.triu(omega_lasso > 1e-8, 1)
             edges_concord = np.triu(omega_concord.todense() > 1e-8, 1)

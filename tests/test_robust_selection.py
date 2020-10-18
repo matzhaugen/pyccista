@@ -28,7 +28,7 @@ class TestCVConcord:
         n_experimens = 1
         mcc = np.zeros(n_experimens)
         mcc_concord = np.zeros(n_experimens)
-        sigma, omega = datasets.erodos_renyi_graph(d)
+        sigma, omega = datasets.erodos_renyi_graph(d, edge_fraction=0.5)
         for i in np.arange(n_experimens):
             if not (i % 10):
                 print(i)

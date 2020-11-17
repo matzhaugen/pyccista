@@ -26,3 +26,11 @@ print(np.round(omega.todense(),2))
 
 Should work on linux and mac. Not compiled on Windows platforms.
 
+# Developing
+If you want to run the tests or develop, run:
+```
+make develop
+pytest -s
+```
+
+### __** PRs Welcome **__

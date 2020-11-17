@@ -23,9 +23,9 @@ class TestCVConcord:
         assert optimal_lambda > 0
 
     def test_with_true_cov_known(self):
-        n = 10000
+        n = 1000
         d = 100  # number of nodes
-        n_experimens = 10
+        n_experimens = 1
         mcc = np.zeros(n_experimens)
         mcc_concord = np.zeros(n_experimens)
         sigma, omega = datasets.erodos_renyi_graph(d, edge_fraction=0.1)

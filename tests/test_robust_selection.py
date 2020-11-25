@@ -22,6 +22,11 @@ class TestCVConcord:
 
         assert optimal_lambda > 0
 
+    # Test Concord with Glasso as comparison
+    # We estimate the number of edges in an erdos renyi graph and
+    # compare with the true number of edges through the mathews correlation coefficient.
+    # The results are printed and can be seen when running tests with
+    # `pytest -s`
     def test_with_true_cov_known(self):
         n = 1000
         d = 100  # number of nodes

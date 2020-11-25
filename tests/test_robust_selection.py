@@ -68,6 +68,3 @@ class TestCVConcord:
 
         assert True
 
-
-if __name__ == "__main__":
-    TestCVConcord().generate_test_data()

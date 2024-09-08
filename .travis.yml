@@ -11,6 +11,18 @@ jobs:
   - os: osx
     language: generic
     env: PYTHON=38 PYTHON_POINT="3.8" TWINE_PASSWORD=$TWINE_TOKEN_PROD
+  - os: osx
+    language: generic
+    env: PYTHON=39 PYTHON_POINT="3.9" TWINE_PASSWORD=$TWINE_TOKEN_PROD
+  - os: osx
+    language: generic
+    env: PYTHON=310 PYTHON_POINT="3.10" TWINE_PASSWORD=$TWINE_TOKEN_PROD
+  - os: osx
+    language: generic
+    env: PYTHON=311 PYTHON_POINT="3.11" TWINE_PASSWORD=$TWINE_TOKEN_PROD
+  - os: osx
+    language: generic
+    env: PYTHON=312 PYTHON_POINT="3.12" TWINE_PASSWORD=$TWINE_TOKEN_PROD
   - env: DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PLAT=manylinux2010_x86_64
       TAG=1 TWINE_PASSWORD=$TWINE_TOKEN_PROD
     services: docker

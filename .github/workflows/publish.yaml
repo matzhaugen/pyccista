@@ -19,10 +19,17 @@ jobs:
       #   uses: actions/setup-python@v5
       #   with:
       #     python-version: "3.x"
-      - name: Add to path
-        run: echo "$HOME/.local/bin" >> $GITHUB_PATH
+      - name: Cache Primes
+        id: cache-bin
+        uses: actions/cache@v4
+        with:
+          path: $HOME/.local/bin
+          key: ${{ runner.os }}-bin
       - name: Build swig
+        if: steps.cache-bin.outputs.cache-hit != 'true'
         run: ./scripts/install_libraries.sh
+      - name: echos
+        run: echo $PATH
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.20.0
       - uses: actions/upload-artifact@v4

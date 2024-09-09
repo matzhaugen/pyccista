@@ -46,7 +46,7 @@ repair-wheel-command = ""
 
 test-command = "pytest {package}/tests"
 before-test = ""
-test-requires = ["pytest"]
+test-requires = ["pytest", "scikit-learn", "numpy", "scipy"]
 test-extras = []
 
 container-engine = "docker"

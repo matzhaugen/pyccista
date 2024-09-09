@@ -27,7 +27,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.cibuildwheel]
 build = "*"
-skip = "cp311-* cp312-* cp313-* pp*"
+skip = "cp36-* cp37-* cp313-* pp*"
 test-skip = ""
 free-threaded-support = false
 

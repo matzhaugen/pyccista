@@ -34,11 +34,8 @@ setup(
     description="Python implemetation of the concord algorithm for pseudo-likelihood graphical model selection",
     author="Sang-Yun Oh, Aydin Buluc, Onkar Dalal, Kshitij Khare, Bala Rajaratnam",
     author_email="syoh@lbl.gov",
-    version="0.3.1",
     url="http://web.stanford.edu/~sangoh",
     packages=find_packages("src"),
     package_dir={"": "src"},
-    test_suite="tests",
-    install_requires=["numpy>=1.18.0", "scipy>=1.5.0"],
     ext_modules=[_ccista],
 )

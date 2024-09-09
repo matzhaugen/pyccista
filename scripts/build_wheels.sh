@@ -15,11 +15,10 @@ system=$(uname -a)
 if [[ ${system} == *"Darwin"* ]]; then
 	pip install -r requirements.txt
 	python3 setup.py build_ext -I eigen-3.3.7 bdist_wheel
-else
-	for PYBIN in /opt/python/*/bin; do
-	    "${PYBIN}/pip" install -r requirements.txt
-	    "${PYBIN}/python3" setup.py build_ext -I eigen-3.3.7 bdist_wheel
-	done
+else	
+    pip install -r requirements.txt
+    python3 setup.py build_ext -I eigen-3.3.7 bdist_wheel
+	
 		# Bundle external shared libraries into the wheels
 	for whl in dist/*.whl; do
 	    repair_wheel "$whl"

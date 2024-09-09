@@ -14,16 +14,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
+      # - name: Set up Python
+      #   uses: actions/setup-python@v5
+      #   with:
+      #     python-version: "3.x"
+      - name: Build swig
+        run: ./scripts/install_libraries.sh
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.20.0
-        env:
-          CIBW_BEFORE_BUILD: pip install -r requirements.txt
-        #    ...
-        # with:
-        #   package-dir: .
-        #   output-dir: wheelhouse
-        #   config-file: "{package}/pyproject.toml"
+        
 
       - uses: actions/upload-artifact@v4
         with:

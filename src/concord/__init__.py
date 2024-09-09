@@ -1,4 +1,4 @@
 from .ccista import ccista
 from .ccwrap import concord
 from .robust_selection import robust_selection
-import datasets
+from .datasets import erodos_renyi_graph

@@ -35,7 +35,7 @@ archs = ["auto"]
 build-frontend = "default"
 config-settings = {}
 dependency-versions = "pinned"
-environment = {}
+environment = {"PATH" = "$PATH:$HOME/.local/bin"}
 environment-pass = []
 build-verbosity = 0
 

@@ -9,14 +9,14 @@ version = "0.3.2"
 description = "Python implemetation of the concord algorithm for pseudo-likelihood graphical model selection"
 
 dependencies = [
-    "numpy>=1.25",
+    "numpy>=1.20",
     "scipy>=1.5.0",
 ]
 
 [project.optional-dependencies]
 # Should be a copy of the build dependencies below.
 dev = [
-    "numpy>=1.25",
+    "numpy>=1.20",
     "pybind11>=2.6,!=2.13.3",
     "scikit-learn"
 ]
@@ -46,7 +46,7 @@ repair-wheel-command = ""
 
 test-command = "pytest {package}/tests"
 before-test = ""
-test-requires = ["pytest", "scikit-learn", "numpy>=1.25", "scipy"]
+test-requires = ["pytest", "scikit-learn", "numpy>=1.20", "scipy"]
 test-extras = []
 
 container-engine = "docker"

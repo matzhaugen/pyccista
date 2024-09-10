@@ -22,12 +22,12 @@ dev = [
 ]
 
 [build-system]
-requires = ["setuptools", "numpy"]
+requires = ["setuptools==74.1.2", "numpy", "cmake>=3.12"]
 build-backend = "setuptools.build_meta"
 
 [tool.cibuildwheel]
 build = "*"
-skip = "cp36-* cp37-* cp313-* pp*"
+skip = "cp36-* cp37-* cp38-* cp31* pp*"
 test-skip = ""
 free-threaded-support = false
 

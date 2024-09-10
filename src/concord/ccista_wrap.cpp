@@ -3309,9 +3309,9 @@ namespace swig {
 
 
 #include <errno.h>
+#define SWIG_FILE_WITH_INIT
 #include "ccista.h"
 
-#define SWIG_FILE_WITH_INIT
   
 
 #ifndef SWIG_FILE_WITH_INIT
@@ -3322,7 +3322,10 @@ namespace swig {
 #include <numpy/arrayobject.h>
 
 
-#if NPY_API_VERSION < 0x00000007
+#include <complex> 
+
+
+#if NPY_API_VERSION < NPY_1_7_API_VERSION
 #define NPY_ARRAY_DEFAULT NPY_DEFAULT
 #define NPY_ARRAY_FARRAY  NPY_FARRAY
 #define NPY_FORTRANORDER  NPY_FORTRAN
@@ -3331,7 +3334,7 @@ namespace swig {
 
 /* Macros to extract array attributes.
  */
-#if NPY_API_VERSION < 0x00000007
+#if NPY_API_VERSION < NPY_1_7_API_VERSION
 #define is_array(a)            ((a) && PyArray_Check((PyArrayObject*)a))
 #define array_type(a)          (int)(PyArray_TYPE((PyArrayObject*)a))
 #define array_numdims(a)       (((PyArrayObject*)a)->nd)
@@ -3342,7 +3345,9 @@ namespace swig {
 #define array_data(a)          (((PyArrayObject*)a)->data)
 #define array_descr(a)         (((PyArrayObject*)a)->descr)
 #define array_flags(a)         (((PyArrayObject*)a)->flags)
+#define array_clearflags(a,f)  (((PyArrayObject*)a)->flags) &= ~f
 #define array_enableflags(a,f) (((PyArrayObject*)a)->flags) = f
+#define array_is_fortran(a)    (PyArray_ISFORTRAN((PyArrayObject*)a))
 #else
 #define is_array(a)            ((a) && PyArray_Check(a))
 #define array_type(a)          PyArray_TYPE((PyArrayObject*)a)
@@ -3355,10 +3360,11 @@ namespace swig {
 #define array_descr(a)         PyArray_DESCR((PyArrayObject*)a)
 #define array_flags(a)         PyArray_FLAGS((PyArrayObject*)a)
 #define array_enableflags(a,f) PyArray_ENABLEFLAGS((PyArrayObject*)a,f)
+#define array_clearflags(a,f)  PyArray_CLEARFLAGS((PyArrayObject*)a,f)
+#define array_is_fortran(a)    (PyArray_IS_F_CONTIGUOUS((PyArrayObject*)a))
 #endif
 #define array_is_contiguous(a) (PyArray_ISCONTIGUOUS((PyArrayObject*)a))
 #define array_is_native(a)     (PyArray_ISNOTSWAPPED((PyArrayObject*)a))
-#define array_is_fortran(a)    (PyArray_ISFORTRAN((PyArrayObject*)a))
 
 
   /* Given a PyObject, return a string describing its type.
@@ -3368,19 +3374,14 @@ namespace swig {
     if (py_obj == NULL          ) return "C NULL value";
     if (py_obj == Py_None       ) return "Python None" ;
     if (PyCallable_Check(py_obj)) return "callable"    ;
-    if (PyString_Check(  py_obj)) return "string"      ;
-    if (PyInt_Check(     py_obj)) return "int"         ;
+    if (PyBytes_Check(   py_obj)) return "string"      ;
+    if (PyLong_Check(    py_obj)) return "int"         ;
     if (PyFloat_Check(   py_obj)) return "float"       ;
     if (PyDict_Check(    py_obj)) return "dict"        ;
     if (PyList_Check(    py_obj)) return "list"        ;
     if (PyTuple_Check(   py_obj)) return "tuple"       ;
-#if PY_MAJOR_VERSION < 3
-    if (PyFile_Check(    py_obj)) return "file"        ;
-    if (PyModule_Check(  py_obj)) return "module"      ;
-    if (PyInstance_Check(py_obj)) return "instance"    ;
-#endif
 
-    return "unkown type";
+    return "unknown type";
   }
 
   /* Given a NumPy typecode, return a string describing the type.
@@ -3424,13 +3425,11 @@ namespace swig {
     return PyArray_EquivTypenums(actual_type, desired_type);
   }
 
-#ifdef SWIGPY_USE_CAPSULE
-  void free_cap(PyObject * cap)
+void free_cap(PyObject * cap)
   {
     void* array = (void*) PyCapsule_GetPointer(cap,SWIGPY_CAPSULE_NAME);
     if (array != NULL) free(array);
   }
-#endif
 
 
 
@@ -3544,7 +3543,11 @@ namespace swig {
       Py_INCREF(array_descr(ary));
       result = (PyArrayObject*) PyArray_FromArray(ary,
                                                   array_descr(ary),
+#if NPY_API_VERSION < NPY_1_7_API_VERSION
                                                   NPY_FORTRANORDER);
+#else
+                                                  NPY_ARRAY_F_CONTIGUOUS);
+#endif
       *is_new_object = 1;
     }
     return result;
@@ -3618,6 +3621,22 @@ namespace swig {
     {
       PyErr_SetString(PyExc_TypeError,
                       "Array must be contiguous.  A non-contiguous array was given");
+      contiguous = 0;
+    }
+    return contiguous;
+  }
+
+  /* Test whether a python object is (C_ or F_) contiguous.  If array is
+   * contiguous, return 1.  Otherwise, set the python error string and
+   * return 0.
+   */
+  int require_c_or_f_contiguous(PyArrayObject* ary)
+  {
+    int contiguous = 1;
+    if (!(array_is_contiguous(ary) || array_is_fortran(ary)))
+    {
+      PyErr_SetString(PyExc_TypeError,
+                      "Array must be contiguous (C_ or F_).  A non-contiguous array was given");
       contiguous = 0;
     }
     return contiguous;
@@ -3706,7 +3725,7 @@ namespace swig {
   {
     int i;
     int success = 1;
-    int len;
+    size_t len;
     char desired_dims[255] = "[";
     char s[255];
     char actual_dims[255] = "[";
@@ -3748,7 +3767,7 @@ namespace swig {
     return success;
   }
 
-  /* Require the given PyArrayObject to to be Fortran ordered.  If the
+  /* Require the given PyArrayObject to be Fortran ordered.  If the
    * the PyArrayObject is already Fortran ordered, do nothing.  Else,
    * set the Fortran ordering flag and recompute the strides.
    */
@@ -3759,7 +3778,13 @@ namespace swig {
     int i;
     npy_intp * strides = array_strides(ary);
     if (array_is_fortran(ary)) return success;
+    int n_non_one = 0;
     /* Set the Fortran ordered flag */
+    const npy_intp *dims = array_dimensions(ary);
+    for (i=0; i < nd; ++i)
+      n_non_one += (dims[i] != 1) ? 1 : 0;
+    if (n_non_one > 1)
+      array_clearflags(ary,NPY_ARRAY_CARRAY);
     array_enableflags(ary,NPY_ARRAY_FARRAY);
     /* Recompute the strides */
     strides[0] = strides[nd-1];
@@ -4096,13 +4121,9 @@ SWIGINTERN PyObject *_wrap_ccista(PyObject *self, PyObject *args) {
     
     if (!array) SWIG_fail;
     
-#ifdef SWIGPY_USE_CAPSULE
     PyObject* cap = PyCapsule_New((void*)(*arg10), SWIGPY_CAPSULE_NAME, free_cap);
-#else
-    PyObject* cap = PyCObject_FromVoidPtr((void*)(*arg10), free);
-#endif
     
-#if NPY_API_VERSION < 0x00000007
+#if NPY_API_VERSION < NPY_1_7_API_VERSION
     PyArray_BASE(array) = cap;
 #else
     PyArray_SetBaseObject(array,cap);
@@ -4119,13 +4140,9 @@ SWIGINTERN PyObject *_wrap_ccista(PyObject *self, PyObject *args) {
     
     if (!array) SWIG_fail;
     
-#ifdef SWIGPY_USE_CAPSULE
     PyObject* cap = PyCapsule_New((void*)(*arg12), SWIGPY_CAPSULE_NAME, free_cap);
-#else
-    PyObject* cap = PyCObject_FromVoidPtr((void*)(*arg12), free);
-#endif
     
-#if NPY_API_VERSION < 0x00000007
+#if NPY_API_VERSION < NPY_1_7_API_VERSION
     PyArray_BASE(array) = cap;
 #else
     PyArray_SetBaseObject(array,cap);
@@ -4142,13 +4159,9 @@ SWIGINTERN PyObject *_wrap_ccista(PyObject *self, PyObject *args) {
     
     if (!array) SWIG_fail;
     
-#ifdef SWIGPY_USE_CAPSULE
     PyObject* cap = PyCapsule_New((void*)(*arg14), SWIGPY_CAPSULE_NAME, free_cap);
-#else
-    PyObject* cap = PyCObject_FromVoidPtr((void*)(*arg14), free);
-#endif
     
-#if NPY_API_VERSION < 0x00000007
+#if NPY_API_VERSION < NPY_1_7_API_VERSION
     PyArray_BASE(array) = cap;
 #else
     PyArray_SetBaseObject(array,cap);

@@ -1,9 +1,9 @@
 %module ccista
 %{
 #include <errno.h>
+#define SWIG_FILE_WITH_INIT
 #include "ccista.h"
 
-#define SWIG_FILE_WITH_INIT
   %}
 
 %include "numpy.i"

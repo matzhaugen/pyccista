@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Create Whl: python setup.py build_ext install sdist bdist_wheel
+# Create Whl: python -m build OR python setup.py build_ext install sdist bdist_wheel
 # Local installation: python -m pip install dist/[name-of-whl]
 # Push to pip: python -m twine upload dist/*
 
@@ -24,14 +24,14 @@ except AttributeError:
 # concord extension module
 _ccista = Extension(
     "_ccista",
-    ["src/concord/ccista.i", "src/concord/ccista.cpp"],
+    ["src/concord/ccista_wrap.cpp", "src/concord/ccista.cpp"],
     include_dirs=[numpy_include, "eigen-3.3.7"],
     swig_opts=["-c++"],
 )
 
 setup(
     name="pyconcord",
-    packages=find_packages("src"),
-    package_dir={"": "src"},
+    package_dir = {'': 'src'},
     ext_modules=[_ccista],
+    py_modules = ["pyconcord"],
 )

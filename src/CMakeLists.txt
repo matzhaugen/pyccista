@@ -1,4 +1,7 @@
+# find_package(Python COMPONENTS Interpreter Development)
 find_package(pybind11 CONFIG REQUIRED)
+find_package(Eigen3 CONFIG REQUIRED)
 pybind11_add_module(_pybind11_numpy_example pybind11_numpy_example_python.cpp)
 target_link_libraries(_pybind11_numpy_example PUBLIC pybind11_numpy_example)
+target_link_libraries(pybind11_numpy_example PUBLIC Eigen3::Eigen)
 install(TARGETS _pybind11_numpy_example DESTINATION pybind11_numpy_example)

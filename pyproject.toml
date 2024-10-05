@@ -11,7 +11,7 @@ license = {text = "MIT"}
 authors=[{name="Liam Keegan", email="liam@keegan.ch"}]
 maintainers=[{name="Liam Keegan", email="liam@keegan.ch"}]
 requires-python = ">=3.8"
-dependencies = ["numpy"]
+dependencies = ["numpy", "scipy"]
 keywords = ["pybind11", "cibuildwheel", "c++", "pypi", "numpy", "simple", "example", "wheel", "pypi", "conda-forge"]
 classifiers=[
     "Programming Language :: C++",

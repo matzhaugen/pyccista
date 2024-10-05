@@ -2,8 +2,24 @@
 
 #include <numeric>
 #include <vector>
+#include <Eigen/Core>
+#include <Eigen/Sparse>
+// #include <pybind11/eigen.h>
 
+using namespace Eigen;
 namespace pybind11numpyexample {
+using RowMatrixXd = Matrix<double, Dynamic, Dynamic, RowMajor>;
+SparseMatrix<double, ColMajor> ccista(const Ref<const RowMatrixXd> Y, //in: dense data
+
+      // const Ref<VectorXi> I,                //in: sparse X
+      // const Ref<VectorXi> J,                //in: sparse X
+      // const Ref<VectorXd> V,                //in: sparse X
+
+      double lambda1,                             //in: L1 penalty
+      double lambda2,                             //in: L2 penalty
+      double epstol,                      //in: convergence tolerance
+      int    maxitr,                       //in: maximum iterations allowed
+      int    bb);                             //in: use bb step (1:yes, 0:no)
 
 /** @brief Helper function that returns a vector of given size and type
  *

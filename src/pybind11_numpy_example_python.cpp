@@ -55,7 +55,7 @@ namespace pybind11numpyexample {
 typedef Triplet<double> T;
 
 SparseMatrix<double, ColMajor> ccista(const Ref<const RowMatrixXd> Y, //in: dense data
-      // optional<SparseMatrix<double, ColMajor>> x0,  
+      optional<SparseMatrix<double, ColMajor>> x0,  
       // const Eigen::Ref<Eigen::VectorXi> I,                //in: sparse X
       // const Eigen::Ref<Eigen::VectorXi> J,                //in: sparse X
       // const Eigen::Ref<Eigen::VectorXd> V,                //in: sparse X
@@ -67,6 +67,7 @@ SparseMatrix<double, ColMajor> ccista(const Ref<const RowMatrixXd> Y, //in: dens
 {
   int n = Y.rows();
   int p = Y.cols();
+  py::print("hi");
   SparseMatrix<double, ColMajor> X(p, p);
   // if (x0.has_value()) {
   //   auto X = x0.value();
@@ -261,7 +262,7 @@ PYBIND11_MODULE(_pybind11_numpy_example, m) {
         "Covariance estimation using Concord "
         "",
         py::arg("Y"), 
-        // py::arg("x0") = py::none(), 
+        py::arg("x0") = py::none(), 
         py::arg("lambda1") = 0, py::arg("lambda2") = 0, py::arg("epstol") = 1e-5, py::arg("maxitr") = 100, py::arg("bb") = 0);
 }
 

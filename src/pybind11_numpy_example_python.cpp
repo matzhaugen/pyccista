@@ -9,7 +9,7 @@ using namespace std;
 
 namespace py = pybind11;
 using namespace Eigen;
-using RowMatrixXd = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+using RowMatrixXd = Matrix<double, Dynamic, Dynamic, RowMajor>;
 // Use RowMatrixXd instead of MatrixXd
 // helper function to avoid making a copy when returning a py::array_t
 // author: https://github.com/YannickJadoul
@@ -50,41 +50,37 @@ void sthreshmat(MatrixXd & x,
   return;
 }
 
-
 namespace pybind11numpyexample {
-
 
 typedef Triplet<double> T;
 
-Eigen::SparseMatrix<double, ColMajor> ccista(const Ref<const RowMatrixXd> Y, //in: dense data
-
+SparseMatrix<double, ColMajor> ccista(const Ref<const RowMatrixXd> Y, //in: dense data
+      // optional<SparseMatrix<double, ColMajor>> x0,  
       // const Eigen::Ref<Eigen::VectorXi> I,                //in: sparse X
       // const Eigen::Ref<Eigen::VectorXi> J,                //in: sparse X
       // const Eigen::Ref<Eigen::VectorXd> V,                //in: sparse X
-
       double lambda1,                             //in: L1 penalty
       double lambda2,                             //in: L2 penalty
       double epstol = 1e-5,                      //in: convergence tolerance
       int    maxitr = 100,                       //in: maximum iterations allowed
       int    bb = 0)                             //in: use bb step (1:yes, 0:no)
-
 {
-  py::print("Hi");
   int n = Y.rows();
   int p = Y.cols();
-  // int i_i_dim = I.size();
-  Eigen::SparseMatrix<double, ColMajor> X(p, p);
-
+  SparseMatrix<double, ColMajor> X(p, p);
+  // if (x0.has_value()) {
+  //   auto X = x0.value();
+  // } else {
   vector<T> tripletList;
-  // tripletList.reserve(i_i_dim);
- 
+  tripletList.reserve(p);
   int index = 0;
   while (index < p) {
     tripletList.push_back(T(index, index, 1.));
     index++;
   }
   X.setFromTriplets(tripletList.begin(), tripletList.end());
-
+  // }
+  
   DiagonalMatrix<double, Dynamic> XdiagM(p);
   SparseMatrix<double, ColMajor> Xn;
   SparseMatrix<double, ColMajor> Step;
@@ -200,7 +196,7 @@ Eigen::SparseMatrix<double, ColMajor> ccista(const Ref<const RowMatrixXd> Y, //i
   // int NNZ = X.nonZeros();
   // int i;
 
-  //memory allocation for sparse matrix output
+  // //memory allocation for sparse matrix output
   // VectorXi i_arr;
   // VectorXi j_arr;
   // VectorXd v_arr;
@@ -215,9 +211,7 @@ Eigen::SparseMatrix<double, ColMajor> ccista(const Ref<const RowMatrixXd> Y, //i
   //   }
   // }
 
- end:
-  py::print("Hi");
-  py::print(MatrixXd(X));
+ // end:
   return X;
 }
 
@@ -266,7 +260,9 @@ PYBIND11_MODULE(_pybind11_numpy_example, m) {
   m.def("ccista", &ccista,
         "Covariance estimation using Concord "
         "",
-        py::arg("Y"), py::arg("lambda1"), py::arg("lambda2") = 0, py::arg("epstol") = 1e-5, py::arg("maxitr") = 100, py::arg("bb") = 0);
+        py::arg("Y"), 
+        // py::arg("x0") = py::none(), 
+        py::arg("lambda1") = 0, py::arg("lambda2") = 0, py::arg("epstol") = 1e-5, py::arg("maxitr") = 100, py::arg("bb") = 0);
 }
 
 } // namespace pybind11numpyexample

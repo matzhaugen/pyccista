@@ -347,6 +347,7 @@ version = "1.0.1"
 source = { editable = "." }
 dependencies = [
     { name = "numpy" },
+    { name = "pytest" },
     { name = "scipy" },
 ]
 
@@ -365,6 +366,7 @@ requires-dist = [
     { name = "breathe", marker = "extra == 'docs'" },
     { name = "cmake", marker = "extra == 'docs'" },
     { name = "numpy" },
+    { name = "pytest", specifier = ">=8.3.3" },
     { name = "pytest", marker = "extra == 'test'" },
     { name = "scipy" },
     { name = "sphinx-rtd-theme", marker = "extra == 'docs'" },

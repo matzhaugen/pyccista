@@ -19,7 +19,7 @@ import subprocess
 
 # -- Project information -----------------------------------------------------
 
-project = "pybind11-numpy-example"
+project = "pyconcord"
 copyright = "2020, Liam Keegan"
 author = "Liam Keegan"
 

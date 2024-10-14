@@ -10,7 +10,7 @@ add_custom_target(
   sphinx-doc
   COMMAND
     sphinx-build -b html
-    -Dbreathe_projects.pybind11-numpy-example="${CMAKE_CURRENT_BINARY_DIR}/xml"
+    -Dbreathe_projects.pyconcord="${CMAKE_CURRENT_BINARY_DIR}/xml"
     -c ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}/sphinx
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}

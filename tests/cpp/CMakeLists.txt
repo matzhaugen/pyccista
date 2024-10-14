@@ -1,5 +1,5 @@
-add_executable(tests pybind11_numpy_example_t.cpp)
-target_link_libraries(tests PUBLIC pybind11_numpy_example
+add_executable(tests pyconcord_t.cpp)
+target_link_libraries(tests PUBLIC pyconcord
                                    Catch2::Catch2WithMain)
 
 # allow user to run tests with `make test` or `ctest`

@@ -3,8 +3,8 @@ requires = ["scikit-build-core", "pybind11"]
 build-backend = "scikit_build_core.build"
 
 [project]
-name = "pybind11-numpy-example"
-version = "1.0.1"
+name = "pyconcord"
+version = "0.4.0"
 description = "An example of using numpy with pybind11"
 readme = "README.md"
 license = {text = "MIT"}
@@ -35,12 +35,17 @@ classifiers=[
 ]
 
 [project.urls]
-Github = "https://github.com/ssciwr/pybind11-numpy-example"
-Documentation = "https://pybind11-numpy-example.readthedocs.io"
+Github = "https://github.com/matzhaugen/pyconcord"
+Documentation = "https://pyconcord.readthedocs.io"
 
 [project.optional-dependencies]
 test = ["pytest"]
 docs = ["cmake", "breathe", "sphinx_rtd_theme"]
+
+[tool.uv]
+# This is the KEY LINE! otherwise the package will be cached and changes will not go through
+# Ref: https://docs.astral.sh/uv/concepts/cache/#dynamic-metadata
+reinstall-package = ["pyconcord"]
 
 [tool.scikit-build.cmake.define]
 BUILD_CPP = "ON"

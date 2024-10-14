@@ -7,9 +7,9 @@
 // #include <pybind11/eigen.h>
 
 using namespace Eigen;
-namespace pybind11numpyexample {
+namespace pyconcord {
 using RowMatrixXd = Matrix<double, Dynamic, Dynamic, RowMajor>;
-SparseMatrix<double, ColMajor> ccista(const Ref<const RowMatrixXd> Y, //in: dense data  
+SparseMatrix<double, ColMajor> concord(const Ref<const RowMatrixXd> Y, //in: dense data  
       std::optional<SparseMatrix<double, ColMajor>> x0,
       // const Ref<VectorXi> I,                //in: sparse X
       // const Ref<VectorXi> J,                //in: sparse X
@@ -33,4 +33,4 @@ template <typename T> std::vector<T> make_vector(std::size_t size) {
   return v;
 }
 
-} // namespace pybind11numpyexample
+} // namespace pyconcord

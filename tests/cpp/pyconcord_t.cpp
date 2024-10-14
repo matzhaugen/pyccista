@@ -1,4 +1,4 @@
-#include "pybind11_numpy_example/pybind11_numpy_example.hpp"
+#include "pyconcord/pyconcord.hpp"
 #include <catch2/catch_test_macros.hpp>
 
 using namespace pybind11numpyexample;

@@ -1,4 +1,9 @@
-build:
-	uv build
+SHELL := /bin/bash
+
+# Run outside make
+setup: uv venv .venv && source ./.venv/bin/activate
+install:
+	uv pip install .
 test:
-	rm -rf .venv .pytest_cache dist && uv cache clean && uv venv .venv && uv build --no-cache --wheel && uv pip install dist/pybind11_numpy_example-1.0.1-cp39-cp39-macosx_14_0_arm64.whl --no-cache && uv run pytest tests --pdb -s
+	pytest -s
+.PHONY: test source setup

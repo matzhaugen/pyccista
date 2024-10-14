@@ -5,7 +5,7 @@
 #include <iostream>
 using namespace std;
 
-#include "pybind11_numpy_example/pybind11_numpy_example.hpp"
+#include "pyconcord/pyconcord.hpp"
 
 namespace py = pybind11;
 using namespace Eigen;
@@ -50,11 +50,11 @@ void sthreshmat(MatrixXd & x,
   return;
 }
 
-namespace pybind11numpyexample {
+namespace pyconcord {
 
 typedef Triplet<double> T;
 
-SparseMatrix<double, ColMajor> ccista(const Ref<const RowMatrixXd> Y, //in: dense data
+SparseMatrix<double, ColMajor> concord(const Ref<const RowMatrixXd> Y, //in: dense data
       optional<SparseMatrix<double, ColMajor>> x0,  
       // const Eigen::Ref<Eigen::VectorXi> I,                //in: sparse X
       // const Eigen::Ref<Eigen::VectorXi> J,                //in: sparse X
@@ -67,21 +67,20 @@ SparseMatrix<double, ColMajor> ccista(const Ref<const RowMatrixXd> Y, //in: dens
 {
   int n = Y.rows();
   int p = Y.cols();
-  py::print("hi");
+
   SparseMatrix<double, ColMajor> X(p, p);
-  // if (x0.has_value()) {
-  //   auto X = x0.value();
-  // } else {
-  vector<T> tripletList;
-  tripletList.reserve(p);
-  int index = 0;
-  while (index < p) {
-    tripletList.push_back(T(index, index, 1.));
-    index++;
+  if (x0.has_value()) {
+    X = x0.value();
+  } else {
+    vector<T> tripletList;
+    tripletList.reserve(p);
+    int index = 0;
+    while (index < p) {
+      tripletList.push_back(T(index, index, 1.));
+      index++;
+    }
+    X.setFromTriplets(tripletList.begin(), tripletList.end());
   }
-  X.setFromTriplets(tripletList.begin(), tripletList.end());
-  // }
-  
   DiagonalMatrix<double, Dynamic> XdiagM(p);
   SparseMatrix<double, ColMajor> Xn;
   SparseMatrix<double, ColMajor> Step;
@@ -93,7 +92,6 @@ SparseMatrix<double, ColMajor> ccista(const Ref<const RowMatrixXd> Y, //in: dens
   MatrixXd S = (Y.transpose() * Y)/n;
   MatrixXd W = S * X;
   MatrixXd Wn(p, p);
-
   MatrixXd G(p, p);
   MatrixXd Gn(p, p);
   MatrixXd subg(p, p);
@@ -249,8 +247,8 @@ static py::array_t<short> vector_as_array_nocopy(std::size_t size) {
   return as_pyarray(std::move(temp_vector));
 }
 
-PYBIND11_MODULE(_pybind11_numpy_example, m) {
-  m.doc() = "Python Bindings for pybind11-numpy-example";
+PYBIND11_MODULE(_pyconcord, m) {
+  m.doc() = "Python Bindings for pyconcord";
   m.def("vector_as_list", &vector_as_list,
         "Returns a vector of 16-bit ints as a Python List");
   m.def("vector_as_array", &vector_as_array,
@@ -258,7 +256,7 @@ PYBIND11_MODULE(_pybind11_numpy_example, m) {
   m.def("vector_as_array_nocopy", &vector_as_array_nocopy,
         "Returns a vector of 16-bit ints as a NumPy array without making a "
         "copy of the data");
-  m.def("ccista", &ccista,
+  m.def("concord", &concord,
         "Covariance estimation using Concord "
         "",
         py::arg("Y"), 
@@ -266,4 +264,4 @@ PYBIND11_MODULE(_pybind11_numpy_example, m) {
         py::arg("lambda1") = 0, py::arg("lambda2") = 0, py::arg("epstol") = 1e-5, py::arg("maxitr") = 100, py::arg("bb") = 0);
 }
 
-} // namespace pybind11numpyexample
+} // namespace pyconcord

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16...3.30)
 
 # Set a name and a version number for your project:
 project(
-  pybind11-numpy-example
+  pyconcord
   VERSION 1.0.1
   LANGUAGES CXX)
 
@@ -45,21 +45,21 @@ endif()
 if(BUILD_CPP)
   # Add an alias target for use if this project is included as a subproject in
   # another project
-  add_library(pybind11_numpy_example::pybind11_numpy_example ALIAS
-              pybind11_numpy_example)
+  add_library(pyconcord::pyconcord ALIAS
+              pyconcord)
 
   # Install targets and configuration
   install(
-    TARGETS pybind11_numpy_example
-    EXPORT pybind11_numpy_example_config
+    TARGETS pyconcord
+    EXPORT pyconcord_config
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
   install(
-    EXPORT pybind11_numpy_example_config
-    NAMESPACE pybind11_numpy_example::
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/pybind11_numpy_example)
+    EXPORT pyconcord_config
+    NAMESPACE pyconcord::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/pyconcord)
 
   install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/include/
           DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})

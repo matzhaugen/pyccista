@@ -51,14 +51,14 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: true
-
     - uses: astral-sh/setup-uv@v3
     - name: install eigen
-      run: sudo apt-get update && sudo apt-get install -y libeigen3-dev build-essential && gcc --version
+      run: 
     - uses: pypa/cibuildwheel@v2.21
       env:
         CIBW_PRERELEASE_PYTHONS: true
         CIBW_ARCHS_WINDOWS: auto ARM64
+        CIBW_BEFORE_BUILD_LINUX: sudo apt-get update && sudo apt-get install -y libeigen3-dev build-essential
 
     - name: Verify clean directory
       run: git diff --exit-code

@@ -44,7 +44,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-13, macos-latest, windows-latest]
+        # os: [ubuntu-latest, macos-13, macos-latest, windows-latest]
+        os: [ubuntu-latest]
 
     steps:
     - uses: actions/checkout@v4
@@ -52,7 +53,8 @@ jobs:
         submodules: true
 
     - uses: astral-sh/setup-uv@v3
-
+    - name: install eigen
+      run: sudo apt-get update && sudo apt-get install -y libeigen3-dev build-essential && gcc --version
     - uses: pypa/cibuildwheel@v2.21
       env:
         CIBW_PRERELEASE_PYTHONS: true

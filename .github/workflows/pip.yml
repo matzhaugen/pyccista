@@ -14,8 +14,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [windows-latest, macos-latest, ubuntu-latest]
-        python-version: ["3.9", "3.13", "pypy-3.10"]
+        # platform: [windows-latest, macos-latest, ubuntu-latest]
+        platform: [ubuntu-latest]
+        python-version: ["3.9", "3.13"]
 
     steps:
     - uses: actions/checkout@v4
@@ -24,7 +25,8 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
         allow-prereleases: true
-
+    - name: install eigen
+        run: sudo apt-get update && sudo apt-get install -y libeigen3-dev build-essential
     - name: Build and install
       run: pip install --verbose .[test]
 

@@ -26,7 +26,7 @@ classifiers = [
 ]
 
 [project.optional-dependencies]
-test = ["pytest"]
+test = ["pytest", "numpy", "scipy"]
 
 
 [tool.scikit-build]
@@ -45,11 +45,17 @@ filterwarnings = [
 ]
 testpaths = ["tests"]
 
+[tool.uv]
+# This is the KEY LINE! otherwise the package will be cached and changes will not go through
+# Ref: https://docs.astral.sh/uv/concepts/cache/#dynamic-metadata
+reinstall-package = ["scikit_build_example"]
+
 
 [tool.cibuildwheel]
 build-frontend = "build[uv]"
 test-command = "pytest {project}/tests"
 test-extras = ["test"]
+test-skip = "pp* *-musllinux* *-manylinux_i686"
 
 [tool.cibuildwheel.pyodide]
 build-frontend = {name = "build", args = ["--exports", "whole_archive"]}

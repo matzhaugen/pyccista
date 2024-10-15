@@ -1,4 +1,4 @@
-# scikit_build_example
+# pyconcord
 
 [![Gitter][gitter-badge]][gitter-link]
 
@@ -8,19 +8,15 @@
 | pip builds           | [![Pip Actions Status][actions-pip-badge]][actions-pip-link] |
 
 
-An example project built with [pybind11][] and [scikit-build-core][]. Python
-3.9+ (see older commits for 3.7+, or even older versions of Python using [scikit-build (classic)][]).
-
-
 [gitter-badge]:            https://badges.gitter.im/pybind/Lobby.svg
 [gitter-link]:             https://gitter.im/pybind/Lobby
-[actions-badge]:           https://github.com/pybind/scikit_build_example/workflows/Tests/badge.svg
-[actions-conda-link]:      https://github.com/pybind/scikit_build_example/actions?query=workflow%3AConda
-[actions-conda-badge]:     https://github.com/pybind/scikit_build_example/workflows/Conda/badge.svg
-[actions-pip-link]:        https://github.com/pybind/scikit_build_example/actions?query=workflow%3APip
-[actions-pip-badge]:       https://github.com/pybind/scikit_build_example/workflows/Pip/badge.svg
-[actions-wheels-link]:     https://github.com/pybind/scikit_build_example/actions?query=workflow%3AWheels
-[actions-wheels-badge]:    https://github.com/pybind/scikit_build_example/workflows/Wheels/badge.svg
+[actions-badge]:           https://github.com/pybind/pyconcord/workflows/Tests/badge.svg
+[actions-conda-link]:      https://github.com/pybind/pyconcord/actions?query=workflow%3AConda
+[actions-conda-badge]:     https://github.com/pybind/pyconcord/workflows/Conda/badge.svg
+[actions-pip-link]:        https://github.com/pybind/pyconcord/actions?query=workflow%3APip
+[actions-pip-badge]:       https://github.com/pybind/pyconcord/workflows/Pip/badge.svg
+[actions-wheels-link]:     https://github.com/pybind/pyconcord/actions?query=workflow%3AWheels
+[actions-wheels-badge]:    https://github.com/pybind/pyconcord/workflows/Wheels/badge.svg
 
 ## Installation
 
@@ -29,12 +25,23 @@ An example project built with [pybind11][] and [scikit-build-core][]. Python
 - `cd [this_repo]`
 - `pip install .[test]`
 
+## To install from pypi:
+`uv pip install pyconcord --no-sources`
+
 ## Test call
 
 ```python
-import scikit_build_example
+import numpy as np
+from scipy.sparse import identity
+import pyconcord as pc
+x = np.random.randn(13, 9)
 
-scikit_build_example.add(1, 2)
+n, p = x.shape
+x0 = identity(p).tocoo()
+omega = pc.concord(x, x0=x0, lambda1=0.3)
+cov = np.round(omega.todense(), 2)
+assert ~np.isinf(cov[0,0])
+assert cov[0, 1] == cov[1, 0]
 ```
 
 ## Files
@@ -45,7 +52,7 @@ necessary. The necessary files are:
 * `pyproject.toml`: The Python project file
 * `CMakeLists.txt`: The CMake configuration file
 * `src/main.cpp`: The source file for the C++ build
-* `src/scikit_build_example/__init__.py`: The Python portion of the module. The root of the module needs to be `<package_name>`, `src/<package_name>`, or `python/<package_name>` to be auto-discovered.
+* `src/pyconcord/__init__.py`: The Python portion of the module. The root of the module needs to be `<package_name>`, `src/<package_name>`, or `python/<package_name>` to be auto-discovered.
 
 These files are also expected and highly recommended:
 
@@ -63,7 +70,6 @@ There are also several completely optional directories:
 And some optional files:
 
 * `.pre-commit-config.yaml`: Configuration for the fantastic static-check runner [pre-commit][].
-* `noxfile.py`: Configuration for the [nox][] task runner, which helps make setup easier for contributors.
 
 This is a simplified version of the recommendations in the [Scientific-Python
 Development Guide][], which is a _highly_ recommended read for anyone

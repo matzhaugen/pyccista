@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import scikit_build_example as pc
+import pyconcord as pc
 
 
 # import pyconcord as pc

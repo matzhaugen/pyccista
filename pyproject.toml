@@ -4,7 +4,7 @@ build-backend = "scikit_build_core.build"
 
 
 [project]
-name = "scikit_build_example"
+name = "pyconcord"
 version = "0.0.1"
 description="A minimal example package (with pybind11)"
 readme = "README.md"
@@ -48,7 +48,7 @@ testpaths = ["tests"]
 [tool.uv]
 # This is the KEY LINE! otherwise the package will be cached and changes will not go through
 # Ref: https://docs.astral.sh/uv/concepts/cache/#dynamic-metadata
-reinstall-package = ["scikit_build_example"]
+reinstall-package = ["pyconcord"]
 
 
 [tool.cibuildwheel]

@@ -25,7 +25,9 @@ An example project built with [pybind11][] and [scikit-build-core][]. Python
 ## Installation
 
 - Clone this repository
-- `pip install ./scikit_build_example`
+- `brew install eigen`
+- `cd [this_repo]`
+- `pip install .[test]`
 
 ## Test call
 

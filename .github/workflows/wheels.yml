@@ -52,8 +52,6 @@ jobs:
       with:
         submodules: true
     - uses: astral-sh/setup-uv@v3
-    - name: install eigen
-      run: 
     - uses: pypa/cibuildwheel@v2.21
       env:
         CIBW_PRERELEASE_PYTHONS: true

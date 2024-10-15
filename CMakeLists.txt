@@ -10,6 +10,7 @@ project(
 # Define the minimum C++ standard that is required
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+list(APPEND CMAKE_PREFIX_PATH "./eigen_build")
 
 # Find the module development requirements (requires FindPython from 3.17 or
 # scikit-build-core's built-in backport)

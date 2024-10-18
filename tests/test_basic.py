@@ -49,3 +49,15 @@ def test_concord_w_guess():
     cov = np.round(omega.todense(), 2)
     assert ~np.isinf(cov[0,0])
     assert cov[0, 1] == cov[1, 0]
+
+def test_speed():
+    lambdas = np.exp(np.linspace(np.log(5e-3), np.log(5e-1), 10))
+
+    data_large = np.random.randn(200, 500)
+    import time
+    for lam in lambdas:
+        start = time.time()
+        np.asarray(pc.concord(data_large, lambda1=0.1).todense())
+        end = time.time()
+        print(f"Elapsed for concord at lambda {lam:.2f} = {(end - start):.2f}")
+

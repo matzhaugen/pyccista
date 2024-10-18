@@ -23,7 +23,12 @@
 - Clone this repository
 - `brew install eigen`
 - `cd [this_repo]`
-- `pip install .[test]`
+- `uv run pip install .[test]`
+
+## To run tests:
+```
+uv run pytest -s
+```
 
 ## To install from pypi:
 `uv pip install pyconcord --no-sources`

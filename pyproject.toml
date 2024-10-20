@@ -5,7 +5,7 @@ build-backend = "scikit_build_core.build"
 
 [project]
 name = "pyconcord"
-version = "0.4.4"
+version = "0.4.5"
 description="A minimal example package (with pybind11)"
 readme = "README.md"
 authors = [

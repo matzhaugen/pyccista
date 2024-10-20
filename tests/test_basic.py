@@ -51,13 +51,15 @@ def test_concord_w_guess():
     assert cov[0, 1] == cov[1, 0]
 
 def test_speed():
-    lambdas = np.exp(np.linspace(np.log(5e-3), np.log(5e-1), 10))
+    # Smaller lambda takes longer time
+    lambdas = np.exp(np.linspace(np.log(5e-2), np.log(5e-1), 10))
 
-    data_large = np.random.randn(200, 500)
+    data_large = np.random.randn(200, 200)
     import time
     for lam in lambdas:
         start = time.time()
-        np.asarray(pc.concord(data_large, lambda1=0.1).todense())
+        sparse_arr = pc.concord(data_large, lambda1=lam)
+        np.asarray(sparse_arr.todense())
         end = time.time()
-        print(f"Elapsed for concord at lambda {lam:.2f} = {(end - start):.2f}")
+        print(f"Elapsed for concord at lambda {lam:.3f} NZ={sparse_arr.nnz / (sparse_arr.shape[0]*(sparse_arr.shape[0]-1))*100:.2f}% time= {(end - start):.3f}s")
 

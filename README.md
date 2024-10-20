@@ -23,11 +23,12 @@
 - Clone this repository
 - `brew install eigen`
 - `cd [this_repo]`
-- `uv run pip install .[test]`
+- `uv venv .venv --python 3.9 && source .venv/bin/activate`
+- `uv pip install .[test]`
 
 ## To run tests:
 ```
-uv run pytest -s
+pytest -s
 ```
 
 ## To install from pypi:

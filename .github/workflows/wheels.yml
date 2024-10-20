@@ -55,7 +55,7 @@ jobs:
       env:
         CIBW_PRERELEASE_PYTHONS: true
         CIBW_BEFORE_BUILD: "{package}/get_eigen.sh"
-        CIBW_BUILD: "{cp,pp}31*-*" # Only build on Python 3.10 and up (ready for 3.10 when it comes) and skip 32-bit builds
+        CIBW_BUILD: "{cp,pp}31*-* {cp,pp}39-*" # Only build on Python 3.9 and up and skip 32-bit builds
         CIBW_SKIP: "*-win32 *-manylinux_i686 *musllinux*" 
         CIBW_FREE_THREADED_SUPPORT: 0 # Remove for now since scipy is not built for 3.13t yet.
 

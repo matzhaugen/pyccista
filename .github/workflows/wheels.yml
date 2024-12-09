@@ -50,8 +50,8 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: true
-    - uses: astral-sh/setup-uv@v3
-    - uses: pypa/cibuildwheel@v2.21
+    - uses: astral-sh/setup-uv@v4
+    - uses: pypa/cibuildwheel@v2.22
       env:
         CIBW_PRERELEASE_PYTHONS: true
         CIBW_BEFORE_BUILD: "{package}/get_eigen.sh"
@@ -92,7 +92,7 @@ jobs:
         path: dist
 
     - name: Generate artifact attestation for sdist and wheels
-      uses: actions/attest-build-provenance@v1
+      uses: actions/attest-build-provenance@v2
       with:
         subject-path: "dist/*"
 
